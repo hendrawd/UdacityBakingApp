@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--since it is just a simple layout, so using CoordinatorLayout here will be overkill-->
+<!--using CardView here is not good since it is against the material design best practice-->
+<!--https://material.io/guidelines/components/cards.html#cards-usage-->
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/detail_step_margin"
+    android:orientation="horizontal"
+    >
+
+    <ImageView
+        android:id="@+id/iv_recipe_image"
+        android:layout_width="@dimen/image_width"
+        android:layout_height="@dimen/image_height"
+        android:layout_gravity="center_vertical"
+        android:contentDescription="@string/step_image"
+        android:src="@mipmap/ic_launcher"/>
+
+    <TextView
+        android:id="@+id/tv_step"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:textSize="@dimen/ingredient_text"
+        />
+
+</LinearLayout>

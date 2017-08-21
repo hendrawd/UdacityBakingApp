@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name" translatable="false">UdacityBakingApp</string>
+    <string name="recipe_image">Recipe Image</string>
+    <string name="step_image">Step Image</string>
+    <string name="recipe_name">Recipe Name = %s</string>
+    <string name="ingredient_count">Ingredients = %d</string>
+    <string name="step_count">Steps = %d</string>
+    <string name="serving_count">Servings = %d</string>
+    <string name="ingredient_item_content">%1$.2f %2$s of %3$s</string>
+    <string name="ingredient">Ingredient</string>
+    <string name="step">Step</string>
+</resources>

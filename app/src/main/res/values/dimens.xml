@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="detail_title">26sp</dimen>
+    <dimen name="ingredient_text">16sp</dimen>
+    <dimen name="step_text">14sp</dimen>
+    <dimen name="line_height">1dp</dimen>
+    <dimen name="detail_title_margin">8dp</dimen>
+    <dimen name="detail_ingredient_margin">8dp</dimen>
+    <dimen name="detail_step_margin">8dp</dimen>
+    <dimen name="image_width">100dp</dimen>
+    <dimen name="image_height">100dp</dimen>
+</resources>
