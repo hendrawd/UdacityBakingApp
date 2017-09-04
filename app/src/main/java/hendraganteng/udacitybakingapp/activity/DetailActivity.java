@@ -1,33 +1,29 @@
 package hendraganteng.udacitybakingapp.activity;
 
 import android.os.Bundle;
+import android.support.annotation.IdRes;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import java.util.List;
+import java.util.ArrayList;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import hendraganteng.udacitybakingapp.R;
-import hendraganteng.udacitybakingapp.adapter.DetailAdapter;
+import hendraganteng.udacitybakingapp.fragment.DetailFragment;
+import hendraganteng.udacitybakingapp.fragment.StepFragment;
 import hendraganteng.udacitybakingapp.network.model.Ingredient;
 import hendraganteng.udacitybakingapp.network.model.Step;
 
 public class DetailActivity extends AppCompatActivity {
 
-    @BindView(R.id.rv)
-    RecyclerView rv;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
-        ButterKnife.bind(this);
 
         setupBackButton();
         setupContent();
@@ -59,11 +55,34 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     private void setupContent() {
-        List<Ingredient> ingredientList = getIntent().getParcelableArrayListExtra("ingredients");
-        List<Step> stepList = getIntent().getParcelableArrayListExtra("steps");
+        DetailFragment detailFragment = DetailFragment.newInstance(
+                getIngredientList(),
+                getStepList()
+        );
+        replaceFragment(R.id.fl_detail, detailFragment);
 
-        DetailAdapter detailAdapter = new DetailAdapter(DetailActivity.this, ingredientList, stepList);
-        rv.setLayoutManager(new LinearLayoutManager(DetailActivity.this));
-        rv.setAdapter(detailAdapter);
+        if (findViewById(R.id.fl_step) != null) {
+            StepFragment stepFragment = StepFragment.newInstance(0);
+            replaceFragment(R.id.fl_step, stepFragment);
+        }
+    }
+
+    private void replaceFragment(@IdRes int fragmentContainerId, Fragment fragment) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        if (fragmentManager != null) {
+            fragmentManager.beginTransaction().replace(fragmentContainerId, fragment).commit();
+        }
+    }
+
+    private ArrayList<Step> getStepList() {
+        return getIntent().getParcelableArrayListExtra("steps");
+    }
+
+    private ArrayList<Ingredient> getIngredientList() {
+        return getIntent().getParcelableArrayListExtra("ingredients");
+    }
+
+    public Step getStep(int index) {
+        return getStepList().get(index);
     }
 }
