@@ -52,8 +52,8 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
         if (!TextUtils.isEmpty(imageUrl)) {
             Picasso.with(context)
                     .load(imageUrl)
-                    .placeholder(R.mipmap.ic_launcher)
-                    .error(R.mipmap.ic_launcher)
+                    .placeholder(R.drawable.ic_food)
+                    .error(R.drawable.ic_food)
                     .into(holder.ivRecipeImage);
         }
         holder.tvTitle.setText(context.getString(R.string.recipe_name, recipe.getName()));

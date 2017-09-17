@@ -16,7 +16,7 @@
         android:layout_height="@dimen/image_height"
         android:layout_gravity="center_vertical"
         android:contentDescription="@string/recipe_image"
-        android:src="@mipmap/ic_launcher"/>
+        android:src="@drawable/ic_food"/>
 
     <LinearLayout
         android:layout_width="match_parent"

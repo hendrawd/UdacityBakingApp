@@ -253,8 +253,8 @@ public class StepFragment extends Fragment {
         imageView.setVisibility(View.VISIBLE);
         Picasso.with(getContext())
                 .load(imageUrl)
-                .placeholder(R.mipmap.ic_launcher)
-                .error(R.mipmap.ic_launcher)
+                .placeholder(R.drawable.ic_event_note)
+                .error(R.drawable.ic_event_note)
                 .into(imageView);
     }
 }
