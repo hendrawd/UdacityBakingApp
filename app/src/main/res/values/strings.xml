@@ -9,4 +9,11 @@
     <string name="ingredient_item_content">%1$.2f %2$s of %3$s</string>
     <string name="ingredient">Ingredient</string>
     <string name="step">Step</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+    <string name="content_description_recipe_thumbnail">Recipe Thumbnail</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="configure">Configure</string>
+    <string name="add_widget">Add widget</string>
+    <string name="please_select_one_recipe">Please select one recipe</string>
 </resources>

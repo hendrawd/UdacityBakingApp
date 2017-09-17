@@ -39,12 +39,22 @@ public class DetailActivity extends AppCompatActivity {
         int actionId = item.getItemId();
         switch (actionId) {
             case android.R.id.home: {
-                // handle back button click
-                NavUtils.navigateUpFromSameTask(this);
+                onBackPressed();
                 return true;
             }
         }
         return false;
+    }
+
+    @Override
+    public void onBackPressed() {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        Fragment mainFragment = fragmentManager.findFragmentById(R.id.fl_main);
+        if (mainFragment instanceof StepFragment) {
+            showDetailFragment();
+        } else {
+            NavUtils.navigateUpFromSameTask(this);
+        }
     }
 
     private void setupBackButton() {
@@ -54,23 +64,29 @@ public class DetailActivity extends AppCompatActivity {
         }
     }
 
-    private void setupContent() {
+    private void showDetailFragment() {
         DetailFragment detailFragment = DetailFragment.newInstance(
                 getIngredientList(),
                 getStepList()
         );
-        replaceFragment(R.id.fl_detail, detailFragment);
+        replaceFragment(R.id.fl_main, detailFragment);
+    }
 
-        if (findViewById(R.id.fl_step) != null) {
+    private void setupContent() {
+        showDetailFragment();
+
+        if (findViewById(R.id.fl_second) != null) {
             StepFragment stepFragment = StepFragment.newInstance(0);
-            replaceFragment(R.id.fl_step, stepFragment);
+            replaceFragment(R.id.fl_second, stepFragment);
         }
     }
 
     private void replaceFragment(@IdRes int fragmentContainerId, Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         if (fragmentManager != null) {
-            fragmentManager.beginTransaction().replace(fragmentContainerId, fragment).commit();
+            fragmentManager.beginTransaction()
+                    .replace(fragmentContainerId, fragment)
+                    .commit();
         }
     }
 
@@ -83,6 +99,18 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     public Step getStep(int index) {
+        if (index > getStepList().size() - 1) {
+            return null;
+        }
         return getStepList().get(index);
+    }
+
+    public void openStep(int stepPosition) {
+        StepFragment stepFragment = StepFragment.newInstance(stepPosition);
+        if (findViewById(R.id.fl_second) != null) {
+            replaceFragment(R.id.fl_second, stepFragment);
+        } else {
+            replaceFragment(R.id.fl_main, stepFragment);
+        }
     }
 }

@@ -14,6 +14,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import hendraganteng.udacitybakingapp.R;
+import hendraganteng.udacitybakingapp.activity.DetailActivity;
 import hendraganteng.udacitybakingapp.network.model.Ingredient;
 import hendraganteng.udacitybakingapp.network.model.Step;
 import hendraganteng.udacitybakingapp.util.CustomToast;
@@ -27,7 +28,7 @@ public class DetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     public static int VIEW_TYPE_TITLE = 0;
     public static int VIEW_TYPE_INGREDIENT = 1;
     public static int VIEW_TYPE_STEP = 2;
-
+    private int stepStartIndex;
     private List<DetailData> detailDataList;
 
     public DetailAdapter(Context context, List<Ingredient> ingredientList, List<Step> stepList) {
@@ -36,16 +37,19 @@ public class DetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         DetailData ingredientTitle = new DetailData();
         ingredientTitle.setContent(context.getString(R.string.ingredient));
         detailDataList.add(ingredientTitle);
+        stepStartIndex++;
 
         for (Ingredient ingredient : ingredientList) {
             DetailData ingredientDetailData = new DetailData();
             ingredientDetailData.setContent(ingredient);
             detailDataList.add(ingredientDetailData);
+            stepStartIndex++;
         }
 
         DetailData stepTitle = new DetailData();
         stepTitle.setContent(context.getString(R.string.step));
         detailDataList.add(stepTitle);
+        stepStartIndex++;
 
         for (Step step : stepList) {
             DetailData stepDetailData = new DetailData();
@@ -144,8 +148,14 @@ public class DetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
         @Override
         public void onClick(View v) {
-            int position = getAdapterPosition();
-            CustomToast.show(v.getContext(), "Item with position " + position + " clicked");
+            final Context context = v.getContext();
+            final int position = getAdapterPosition();
+            final int stepPosition = position - stepStartIndex;
+            if (context instanceof DetailActivity) {
+                DetailActivity detailActivity = (DetailActivity) context;
+                detailActivity.openStep(stepPosition);
+            }
+            CustomToast.show(v.getContext(), "Item with position " + position + " clicked, Step with position " + stepPosition + " clicked");
         }
     }
 

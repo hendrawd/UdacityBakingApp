@@ -3,11 +3,46 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_margin="@dimen/fragment_step_margin"
     tools:context="hendraganteng.udacitybakingapp.fragment.StepFragment">
 
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Halo dunia!"/>
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
+        <ImageView
+            android:id="@+id/iv"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/fragment_step_content_height"
+            android:contentDescription="@string/content_description_recipe_thumbnail"/>
+
+        <com.google.android.exoplayer2.ui.SimpleExoPlayerView
+            android:id="@+id/sepv"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/fragment_step_content_height"/>
+
+        <TextView
+            android:id="@+id/tv_step"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/fragment_step_text_margin"
+            />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/b_prev"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|left"
+        android:text="@string/previous"
+        tools:ignore="RtlHardcoded"/>
+
+    <Button
+        android:id="@+id/b_next"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|right"
+        android:text="@string/next"
+        tools:ignore="RtlHardcoded"/>
 </FrameLayout>

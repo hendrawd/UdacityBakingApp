@@ -13,8 +13,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".activity.MainActivity"
-            android:launchMode="singleTop"
-            >
+            android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -23,8 +22,23 @@
         </activity>
         <activity
             android:name=".activity.DetailActivity"
-            android:parentActivityName=".activity.MainActivity"
-            >
+            android:parentActivityName=".activity.MainActivity">
+        </activity>
+
+        <receiver android:name=".widget.RecipeAppWidget">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/recipe_app_widget_info"/>
+        </receiver>
+
+        <activity android:name=".widget.RecipeAppWidgetConfigureActivity">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE"/>
+            </intent-filter>
         </activity>
     </application>
 

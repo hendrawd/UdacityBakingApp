@@ -1,0 +1,13 @@
+<TextView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/appwidget_text"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/profile_picture"
+    android:contentDescription="@string/appwidget_text"
+    android:gravity="center"
+    android:padding="@dimen/widget_padding"
+    android:text="@string/appwidget_text"
+    android:textColor="@color/widget_text_color"
+    android:textSize="@dimen/widget_text_size"
+    android:textStyle="bold|italic"/>
