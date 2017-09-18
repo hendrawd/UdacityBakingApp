@@ -39,8 +39,7 @@ public class StepFragment extends Fragment {
     private static final String KEY_PLAYBACK_POSITION = "key_playback_position";
     private static final String KEY_PLAY_WHEN_READY = "key_play_when_ready";
     private static final String KEY_CURRENT_WINDOW = "key_current_window";
-    private int index;
-    private static final String KEY_INDEX = "index";
+    private static final String KEY_STEP_INDEX = "step_index";
     @BindView(R.id.sepv)
     SimpleExoPlayerView simpleExoPlayerView;
     @BindView(R.id.iv)
@@ -56,6 +55,7 @@ public class StepFragment extends Fragment {
     private long mPlaybackPosition;
     private boolean mPlayWhenReady;
     private int mCurrentWindow;
+    private int mStepIndex;
 
     @OnClick({
             R.id.b_prev,
@@ -80,10 +80,10 @@ public class StepFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static StepFragment newInstance(int index) {
+    public static StepFragment newInstance(int stepIndex) {
         StepFragment fragment = new StepFragment();
         Bundle args = new Bundle();
-        args.putInt(KEY_INDEX, index);
+        args.putInt(KEY_STEP_INDEX, stepIndex);
         fragment.setArguments(args);
         return fragment;
     }
@@ -93,7 +93,7 @@ public class StepFragment extends Fragment {
         super.onCreate(savedInstanceState);
         Bundle arguments = getArguments();
         if (arguments != null) {
-            index = arguments.getInt(KEY_INDEX);
+            mStepIndex = arguments.getInt(KEY_STEP_INDEX);
         }
     }
 
@@ -108,7 +108,7 @@ public class StepFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        showContent(getStep(index));
+        showContent(getStep(mStepIndex));
     }
 
     @Override
@@ -134,19 +134,29 @@ public class StepFragment extends Fragment {
     }
 
     private void showContent(Step step) {
+        simpleExoPlayerView.setVisibility(View.GONE);
         imageView.setVisibility(View.GONE);
+
         tvStep.setText(step.getDescription());
         showVideo(step);
-        if (index == 0) {
+
+        //show default broken video icon
+        if (simpleExoPlayerView.getVisibility() != View.VISIBLE &&
+                imageView.getVisibility() != View.VISIBLE) {
+            imageView.setVisibility(View.VISIBLE);
+            imageView.setImageResource(R.drawable.ic_broken_video);
+        }
+
+        if (mStepIndex == 0) {
             bPrev.setVisibility(View.INVISIBLE);
         } else {
             bPrev.setVisibility(View.VISIBLE);
         }
         if (getNextStep() == null) {
-            index--;
+            mStepIndex--;
             bNext.setVisibility(View.INVISIBLE);
         } else {
-            index--;
+            mStepIndex--;
             bNext.setVisibility(View.VISIBLE);
         }
     }
@@ -157,13 +167,11 @@ public class StepFragment extends Fragment {
     }
 
     private Step getPrevStep() {
-        index--;
-        return getStep(index);
+        return getStep(--mStepIndex);
     }
 
     private Step getNextStep() {
-        index++;
-        return getStep(index);
+        return getStep(++mStepIndex);
     }
 
     private void showVideo(Step step) {
@@ -178,11 +186,8 @@ public class StepFragment extends Fragment {
         mPlayer.setPlayWhenReady(mPlayWhenReady);
         mPlayer.seekTo(mCurrentWindow, mPlaybackPosition);
 
-        if (TextUtils.isEmpty(step.getVideoURL()) &&
-                TextUtils.isEmpty(step.getThumbnailURL())) {
-            simpleExoPlayerView.setVisibility(View.GONE);
-        } else {
-            simpleExoPlayerView.setVisibility(View.VISIBLE);
+        if (!TextUtils.isEmpty(step.getVideoURL()) ||
+                !TextUtils.isEmpty(step.getThumbnailURL())) {
             Uri uri = null;
             String thumbnailUrl = step.getThumbnailURL();
             if (!TextUtils.isEmpty(step.getVideoURL())) {
@@ -194,8 +199,11 @@ public class StepFragment extends Fragment {
                     showImage(imageView, step.getThumbnailURL());
                 }
             }
-            MediaSource mediaSource = buildMediaSource(uri);
-            mPlayer.prepare(mediaSource, true, false);
+            if (uri != null) {
+                simpleExoPlayerView.setVisibility(View.VISIBLE);
+                MediaSource mediaSource = buildMediaSource(uri);
+                mPlayer.prepare(mediaSource, true, false);
+            }
         }
     }
 
@@ -253,8 +261,8 @@ public class StepFragment extends Fragment {
         imageView.setVisibility(View.VISIBLE);
         Picasso.with(getContext())
                 .load(imageUrl)
-                .placeholder(R.drawable.ic_event_note)
-                .error(R.drawable.ic_event_note)
+                .placeholder(R.drawable.ic_broken_video)
+                .error(R.drawable.ic_broken_video)
                 .into(imageView);
     }
 }

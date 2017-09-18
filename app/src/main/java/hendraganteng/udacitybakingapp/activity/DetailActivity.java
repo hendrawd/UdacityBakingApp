@@ -24,9 +24,16 @@ public class DetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
-
-        setupBackButton();
-        setupContent();
+        if (savedInstanceState == null) {
+            setupBackButton();
+            setupContent(
+                    DetailFragment.newInstance(
+                            getIngredientList(),
+                            getStepList()
+                    ),
+                    StepFragment.newInstance(0)
+            );
+        }
     }
 
     @Override
@@ -51,7 +58,14 @@ public class DetailActivity extends AppCompatActivity {
         FragmentManager fragmentManager = getSupportFragmentManager();
         Fragment mainFragment = fragmentManager.findFragmentById(R.id.fl_main);
         if (mainFragment instanceof StepFragment) {
-            showDetailFragment();
+            //show detail fragment
+            replaceFragment(
+                    R.id.fl_main,
+                    DetailFragment.newInstance(
+                            getIngredientList(),
+                            getStepList()
+                    )
+            );
         } else {
             NavUtils.navigateUpFromSameTask(this);
         }
@@ -64,20 +78,22 @@ public class DetailActivity extends AppCompatActivity {
         }
     }
 
-    private void showDetailFragment() {
-        DetailFragment detailFragment = DetailFragment.newInstance(
-                getIngredientList(),
-                getStepList()
-        );
-        replaceFragment(R.id.fl_main, detailFragment);
+    private void setupContent(Fragment main, Fragment secondary) {
+        //show detail fragment
+        replaceFragment(R.id.fl_main, main);
+
+        //show step fragment
+        if (isTwoPane()) {
+            replaceFragment(R.id.fl_second, secondary);
+        }
     }
 
-    private void setupContent() {
-        showDetailFragment();
-
-        if (findViewById(R.id.fl_second) != null) {
-            StepFragment stepFragment = StepFragment.newInstance(0);
+    public void openStep(int stepPosition) {
+        Fragment stepFragment = StepFragment.newInstance(stepPosition);
+        if (isTwoPane()) {
             replaceFragment(R.id.fl_second, stepFragment);
+        } else {
+            replaceFragment(R.id.fl_main, stepFragment);
         }
     }
 
@@ -105,12 +121,7 @@ public class DetailActivity extends AppCompatActivity {
         return getStepList().get(index);
     }
 
-    public void openStep(int stepPosition) {
-        StepFragment stepFragment = StepFragment.newInstance(stepPosition);
-        if (findViewById(R.id.fl_second) != null) {
-            replaceFragment(R.id.fl_second, stepFragment);
-        } else {
-            replaceFragment(R.id.fl_main, stepFragment);
-        }
+    private boolean isTwoPane() {
+        return findViewById(R.id.fl_second) != null;
     }
 }

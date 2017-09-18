@@ -1,6 +1,7 @@
 package hendraganteng.udacitybakingapp.adapter;
 
 import android.content.Context;
+import android.support.annotation.IntDef;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,7 +20,6 @@ import hendraganteng.udacitybakingapp.R;
 import hendraganteng.udacitybakingapp.activity.DetailActivity;
 import hendraganteng.udacitybakingapp.network.model.Ingredient;
 import hendraganteng.udacitybakingapp.network.model.Step;
-import hendraganteng.udacitybakingapp.util.CustomToast;
 
 /**
  * @author hendrawd on 8/20/17
@@ -25,9 +27,16 @@ import hendraganteng.udacitybakingapp.util.CustomToast;
 
 public class DetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    public static int VIEW_TYPE_TITLE = 0;
-    public static int VIEW_TYPE_INGREDIENT = 1;
-    public static int VIEW_TYPE_STEP = 2;
+    public static final int VIEW_TYPE_UNDEFINED = 0;
+    public static final int VIEW_TYPE_TITLE = 1;
+    public static final int VIEW_TYPE_INGREDIENT = 2;
+    public static final int VIEW_TYPE_STEP = 3;
+
+    @Retention(RetentionPolicy.SOURCE)
+    @IntDef({VIEW_TYPE_UNDEFINED, VIEW_TYPE_TITLE, VIEW_TYPE_INGREDIENT, VIEW_TYPE_STEP})
+    public @interface ViewType {
+    }
+
     private int stepStartIndex;
     private List<DetailData> detailDataList;
 
@@ -59,7 +68,7 @@ public class DetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     }
 
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, @ViewType final int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         View view;
         if (viewType == VIEW_TYPE_TITLE) {
@@ -78,8 +87,8 @@ public class DetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         final Context context = holder.itemView.getContext();
-        DetailData detailData = detailDataList.get(position);
-        int viewType = detailData.getType();
+        final DetailData detailData = detailDataList.get(position);
+        @ViewType final int viewType = detailData.getType();
         if (viewType == VIEW_TYPE_TITLE) {
             TitleViewHolder titleViewHolder = (TitleViewHolder) holder;
             titleViewHolder.tvTitle.setText((String) detailData.getContent());
@@ -110,6 +119,7 @@ public class DetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
 
     @Override
+    @ViewType
     public int getItemViewType(int position) {
         return detailDataList.get(position).getType();
     }
@@ -155,13 +165,15 @@ public class DetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 DetailActivity detailActivity = (DetailActivity) context;
                 detailActivity.openStep(stepPosition);
             }
-            CustomToast.show(v.getContext(), "Item with position " + position + " clicked, Step with position " + stepPosition + " clicked");
+            // CustomToast.show(context,
+            //         "Item with position " + position + " clicked, Step with position " + stepPosition + " clicked");
         }
     }
 
     public class DetailData {
         private Object object;
 
+        @ViewType
         public int getType() {
             if (object instanceof Ingredient) {
                 return VIEW_TYPE_INGREDIENT;
@@ -169,7 +181,10 @@ public class DetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             if (object instanceof Step) {
                 return VIEW_TYPE_STEP;
             }
-            return VIEW_TYPE_TITLE;
+            if (object instanceof String) {
+                return VIEW_TYPE_TITLE;
+            }
+            return VIEW_TYPE_UNDEFINED;
         }
 
         public Object getContent() {

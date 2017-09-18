@@ -51,19 +51,11 @@ public class DetailFragment extends Fragment {
                              Bundle savedInstanceState) {
         View parent = inflater.inflate(R.layout.fragment_detail, container, false);
         recyclerView = (RecyclerView) parent.findViewById(R.id.rv);
-        return parent;
-    }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        setupContent();
-    }
-
-    private void setupContent() {
         DetailAdapter detailAdapter = new DetailAdapter(getContext(), ingredientList, stepList);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(detailAdapter);
-    }
 
+        return parent;
+    }
 }
