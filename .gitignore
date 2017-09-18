@@ -1,4 +1,4 @@
-instapk.properties
+/instapk.properties
 *.iml
 .gradle
 /local.properties
