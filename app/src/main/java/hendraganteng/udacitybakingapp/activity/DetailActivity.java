@@ -24,7 +24,7 @@ public class DetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
-        if (savedInstanceState == null) {
+        if (savedInstanceState == null || isTwoPane()) {
             setupBackButton();
             setupContent(
                     DetailFragment.newInstance(
@@ -89,10 +89,20 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     public void openStep(int stepPosition) {
-        Fragment stepFragment = StepFragment.newInstance(stepPosition);
         if (isTwoPane()) {
-            replaceFragment(R.id.fl_second, stepFragment);
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            Fragment fragment = fragmentManager.findFragmentById(R.id.fl_second);
+            if (fragment != null && fragment instanceof StepFragment) {
+                // use current fragment instead of recreating it
+                StepFragment stepFragment = (StepFragment) fragment;
+                stepFragment.setStepIndex(stepPosition);
+                stepFragment.changeContent(getStep(stepPosition));
+            } else {
+                Fragment stepFragment = StepFragment.newInstance(stepPosition);
+                replaceFragment(R.id.fl_second, stepFragment);
+            }
         } else {
+            Fragment stepFragment = StepFragment.newInstance(stepPosition);
             replaceFragment(R.id.fl_main, stepFragment);
         }
     }

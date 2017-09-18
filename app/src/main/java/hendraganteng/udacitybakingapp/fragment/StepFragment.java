@@ -64,14 +64,10 @@ public class StepFragment extends Fragment {
     public void buttonClick(View clickedView) {
         switch (clickedView.getId()) {
             case R.id.b_prev:
-                resetPlayerState();
-                releasePlayer();
-                showContent(getPrevStep());
+                changeContent(getPrevStep());
                 break;
             case R.id.b_next:
-                resetPlayerState();
-                releasePlayer();
-                showContent(getNextStep());
+                changeContent(getNextStep());
                 break;
         }
     }
@@ -264,5 +260,15 @@ public class StepFragment extends Fragment {
                 .placeholder(R.drawable.ic_broken_video)
                 .error(R.drawable.ic_broken_video)
                 .into(imageView);
+    }
+
+    public void changeContent(Step step) {
+        resetPlayerState();
+        releasePlayer();
+        showContent(step);
+    }
+
+    public void setStepIndex(int stepIndex) {
+        this.mStepIndex = stepIndex;
     }
 }
