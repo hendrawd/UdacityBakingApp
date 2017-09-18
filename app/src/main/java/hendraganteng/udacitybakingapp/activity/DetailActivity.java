@@ -20,17 +20,20 @@ import hendraganteng.udacitybakingapp.network.model.Step;
 
 public class DetailActivity extends AppCompatActivity {
 
+    private DetailFragment mDetailFragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
         if (savedInstanceState == null || isTwoPane()) {
             setupBackButton();
+            mDetailFragment = DetailFragment.newInstance(
+                    getIngredientList(),
+                    getStepList()
+            );
             setupContent(
-                    DetailFragment.newInstance(
-                            getIngredientList(),
-                            getStepList()
-                    ),
+                    mDetailFragment,
                     StepFragment.newInstance(0)
             );
         }
@@ -61,10 +64,7 @@ public class DetailActivity extends AppCompatActivity {
             //show detail fragment
             replaceFragment(
                     R.id.fl_main,
-                    DetailFragment.newInstance(
-                            getIngredientList(),
-                            getStepList()
-                    )
+                    mDetailFragment
             );
         } else {
             NavUtils.navigateUpFromSameTask(this);
